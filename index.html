@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+      </style>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body  style="font-family: 'Inter', sans-serif;">
+      <div id="app" :style="`background-color: ${settings && settings.downloads_settings && settings.downloads_settings.page_background_color};`">
+         <div class="col-md-12">
+            <header class="d-flex align-items-center pb-3 mb-5" :style="`background-color:${settings && settings.downloads_settings && settings.downloads_settings.header_background_color};border-bottom: 1px solid whitesmoke;`">
+               <a :href=store.url class="d-flex align-items-center text-dark text-decoration-none" target="_blank">
+                  <img :src="settings && settings.email_settings && settings.email_settings.company_logo" class="m-1" :height="settings && settings.downloads_settings && settings.downloads_settings.image_height" :width="settings && settings.downloads_settings && settings.downloads_settings.image_width">
+                  <h4 :style="`color:${settings && settings.downloads_settings && settings.downloads_settings.brand_name_font_color};vertical-align:center;margin:30px;`">{{settings && settings.email_settings && settings.email_settings.company_brand}}</h4>
+               </a>
+            </header>
+            <!-- DOWNLOADS_DELIVERY_SUCCESSFUL -->
+            <main v-if="reason === 'DOWNLOADS_DELIVERY_SUCCESSFUL'">
+               <div class="container" >
+                  <!-- information & message section -->
+                  <div class="row">
+                     <div class="col-md-2"></div>
+                     <div class="col-md-8">
+                        <!-- order date and no infomation-->
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div>
+                                 <h3 :style="`font-weight: bolder;color:${settings.downloads_settings.header_font_color};`">#{{order.number}}</h3>
+                                 <small :style="`color:${settings.downloads_settings.header_font_color};`">{{order.date}}</small>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ends here -->
+                        <!-- personal message information-->
+                        <div class="row mt-3">
+                           <div class="col-md-12">
+                              <h2 :style="`padding: 10px;color:${settings.downloads_settings.header_font_color};`">
+                                 {{settings.downloads_settings.header_message}}
+                              </h2>
+                              <!-- custom html over here -->
+                              <div v-html=settings.downloads_settings.header_message_optional :style="`padding:10px;color:${settings.downloads_settings.header_font_color};`">
+                              </div>
+                              <!-- ends here -->
+                           </div>
+                        </div>
+                        <!-- ends here -->
+                     </div>
+                  </div>
+                  <!-- ends here -->
+                  <!-- download section over here -->  
+                  <div v-if="downloads" v-for="download in downloads" class="mt-4 row">
+                     <div class="col-md-2"></div>
+                     <div class="col-md-8">
+                        <div class="card" style="border: 0px;" >
+                           <div class="card-header" style="border: 0px;padding:40px; background-color: white;border-radius: 10px;;  ">
+                              <h5 style="color:black;"><i class="fa fa-file" aria-hidden="true"></i> &nbsp; {{download.product_name}} </h5>
+                           </div>
+                           <div class="card-body">
+                              <div class="card p-3 m-3"  v-for="product_file in download.product_files" :style="`display: flex;flex-direction: row;flex-wrap: wrap;border:0px;background-color:${settings.downloads_settings.card_background_color};`">
+                                 <div style="display: flex;flex: 4;flex-direction: column;">
+                                    <p :style="`flex:4;color:${settings.downloads_settings.card_font_color};`">{{product_file.file_display_name}}</p>
+                                    <small class="text-muted" :style="`color:${settings.downloads_settings.card_font_color};`">{{product_file.file_size}}</small>
+                                 </div>
+                                 <div style="flex:1;margin:auto;">
+                                    <a :href=product_file.file_url :style="`flex:1;background-color: ${settings.downloads_settings.button_background_color};color:${settings.downloads_settings.button_font_color};padding:8px;border:1px solid whitesmoke;`" target="_blank" class="btn btn-default"> Download</a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- ends here -->
+               </div>
+            </main>
+            <!-- MERCHANT_API_TOKEN_INVALID-->
+            <main v-if="reason == 'MERCHANT_API_TOKEN_INVALID' || reason == 'DOWNLOADS_NOT_FOUND_FOR_ORDER' || reason == 'DOWNLOADS_EXPIRY_LIMIT_REACHED'">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-2"></div>
+                     <div class="col-md-8">
+                        <!-- ends here -->
+                        <!-- personal message information-->
+                        <div class="row mt-3">
+                           <div class="col-md-12">
+                              <h3 :style="`color:${settings && settings.downloads_settings && settings.downloads_settings.header_font_color};`">Order : #{{edge_cases.order_id}}</h3>
+                              <!-- custom html over here -->
+                              <div v-if=edge_cases.msg v-html=edge_cases.msg :style="`padding:10px;color:${settings && settings.downloads_settings && settings.downloads_settings.header_font_color};`">
+                              </div>
+                              <!-- ends here -->
+                           </div>
+                        </div>
+                        <!-- ends here -->
+                     </div>
+                  </div>
+               </div>
+            </main>
+            <!-- edge cases -->
+            <!-- MERCHANT_NO_LONGER_ACTIVE -->
+            <main v-if="reason === 'MERCHANT_NO_LONGER_ACTIVE'">
+            </main>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"
+         integrity="sha512-L4lHq2JI/GoKsERT8KYa72iCwfSrKYWEyaBxzJeeITM9Lub5vlTj8tufqYk056exhjo2QDEipJrg6zen/DDtoQ=="
+         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script>
+         var app = new Vue({
+           el: '#app',
+           data: {
+              store :{},
+              order:{}, 
+              customer:{}, 
+              settings:{}, 
+              downloads:{},
+              reason:'',
+              edge_cases:{
+                order_id:'',
+                msg:'',
+                show_contact:'',
+                html:''
+              }
+           },
+           mounted() {
+         
+             const params = new Proxy(new URLSearchParams(window.location.search), {
+               get: (searchParams, prop) => searchParams.get(prop),
+             });
+         
+             //now let's load the data here
+             const store_url = params.store_url;
+             const order_id = params.order_id;
+             const code = params.code;
+             const API_URL = 'https://app.sellkite.xyz/api/v1/downloads'
+             fetch(`${API_URL}?store_url=${store_url}&order_id=${order_id}&code=${code}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(response => {
+                    const {status , reason , data} = response
+                    console.log('STATUS',status);
+                    console.log('reason',reason);
+                    console.log('data',data);
+                    if (status === 'success' && reason === 'DOWNLOADS_DELIVERY_SUCCESSFUL'){
+                        const { store , order , customer , settings , downloads } = data
+                        this.store = store;
+                        this.order = order;
+                        this.customer = customer;
+                        this.settings = settings;
+                        this.downloads = downloads;
+                        this.reason = 'DOWNLOADS_DELIVERY_SUCCESSFUL';
+                        //add the google font over here
+                         //add the link here
+                        var link = document.createElement( "link" );
+                        link.href = `https://fonts.googleapis.com/css2?family=${this.settings.downloads_settings.fontFamily}&display=swap`;
+                        link.type = "text/css";
+                        link.rel = "stylesheet";
+                        document.getElementsByTagName( "head" )[0].appendChild( link );
+                        //attach the fontFamily & color here here
+                        const body = document.getElementById("bodyID")
+                        body.style.fontFamily = this.settings.downloads_settings.fontFamily;
+         
+         
+                        //ends here
+                    }else if(reason == 'MERCHANT_API_TOKEN_INVALID' || reason == 'DOWNLOADS_NOT_FOUND_FOR_ORDER' || reason == 'DOWNLOADS_EXPIRY_LIMIT_REACHED'){
+                        const {  msg , show_contact , order_id , settings } = data
+                        this.reason = reason;
+                        this.settings = settings;
+                        this.edge_cases.order_id = order_id;
+                        this.edge_cases.show_contact = show_contact;
+                        if (reason !== 'DOWNLOADS_EXPIRY_LIMIT_REACHED'){
+                            console.log("p",msg)
+                            this.edge_cases.msg = `<p>${msg}</p>`;    
+                        }
+                        
+                    }
+                })
+                .catch(error => {
+                   // Handle any errors
+                   console.error('Error:', error);
+            });
+         
+         
+           },
+           methods: {
+             
+           }
+         });
+         
+      </script>
+   </body>
