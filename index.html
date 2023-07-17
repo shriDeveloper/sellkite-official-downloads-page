@@ -27,7 +27,7 @@
 
         <div class="col-md-12">
             <header class="d-flex align-items-center pb-3 mb-5" :style="`background-color:${settings && settings.downloads_settings && settings.downloads_settings.header_background_color};border-bottom: 1px solid whitesmoke;`">
-               <a :href=store.url class="d-flex align-items-center text-dark text-decoration-none" target="_blank">
+               <a :href="`https://${store.url}`" style="cursor: pointer;" class="d-flex align-items-center text-dark text-decoration-none" target="_blank">
                   <img :src="settings && settings.email_settings && settings.email_settings.company_logo" class="m-1" :height="settings && settings.downloads_settings && settings.downloads_settings.image_height" :width="settings && settings.downloads_settings && settings.downloads_settings.image_width">
                   <h4 :style="`color:${settings && settings.downloads_settings && settings.downloads_settings.brand_name_font_color};vertical-align:center;margin:30px;`">{{settings && settings.email_settings && settings.email_settings.company_brand}}</h4>
                </a>
@@ -188,6 +188,7 @@
                     if (status === 'success' && reason === 'DOWNLOADS_DELIVERY_SUCCESSFUL'){
                         const { store , order , customer , settings , downloads } = data
                         this.store = store;
+                        console.log("STORE",store)
                         this.order = order;
                         this.customer = customer;
                         this.settings = settings;
