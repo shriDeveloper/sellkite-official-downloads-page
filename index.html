@@ -4,27 +4,36 @@
       <title>Sellkite - Digital Order Downloads</title>
       <style>
       </style>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
-      <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/179/179383.png?w=740&t=st=1689588259~exp=1689588859~hmac=18a69c9f4e27a43be26ce08c32384a28cfe99a4cb3b719a05d5d815560a4892b">
-      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-      <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+      <link rel="stylesheet" href="./assets/bootstrap.css">
+      <link rel="icon" href="./assets/favicon.png">
+      <script src="./assets/vue.js"></script>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
-
+      
    </head>
    <body  style="font-family: 'Inter', sans-serif;" id="bodyID">
+    
+    
+        <!-- JavaScript check and redirect message -->
+        <noscript>
+            <div style="text-align: center; padding: 20px; font-size: 18px; background-color: yellow;">
+                JavaScript is disabled in your browser. For full functionality of this site, please enable adas JavaScript.
+            </div>
+        </noscript>
+
+
       <div id="app" :style="`background-color: ${settings && settings.downloads_settings && settings.downloads_settings.page_background_color};`">
          
         <div class="container" v-if="isLoaderOn">
 		    <div class="row text-center">
 		    	<div class="col-md-12" style="display: flex;justify-content: center;">
-		    		<img src="https://cdn.jsdelivr.net/gh/shriDeveloper/sellkite-digital-downloads-demo/roller-loading-transparent.gif">
+		    		<img src="./assets/loader-transparent.gif">
 		    	</div>
 		    </div>
 	    </div>
 
+        
         <div class="col-md-12">
             <header class="d-flex align-items-center pb-3 mb-5" :style="`background-color:${settings && settings.downloads_settings && settings.downloads_settings.header_background_color};border-bottom: 1px solid whitesmoke;`">
                <a :href="`https://${store.url}`" style="cursor: pointer;" class="d-flex align-items-center text-dark text-decoration-none" target="_blank">
@@ -138,10 +147,10 @@
             
          </div>
       </div>
+
+     
       
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"
-         integrity="sha512-L4lHq2JI/GoKsERT8KYa72iCwfSrKYWEyaBxzJeeITM9Lub5vlTj8tufqYk056exhjo2QDEipJrg6zen/DDtoQ=="
-         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
       <script>
          var app = new Vue({
            el: '#app',
@@ -172,6 +181,7 @@
              const store_url = params.store_url;
              const order_id = params.order_id;
              const code = params.code;
+
              const API_URL = 'https://app.sellkite.xyz/api/v1/downloads'
              fetch(`${API_URL}?store_url=${store_url}&order_id=${order_id}&code=${code}`, {
                 method: 'GET',
