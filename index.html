@@ -93,6 +93,14 @@
                                         <a :href=product_file.file_url :style="`flex:1;background-color: ${settings.downloads_settings.button_background_color};color:${settings.downloads_settings.button_font_color};padding:8px;border:1px solid whitesmoke;`" target="_blank" class="btn btn-default"> Download</a>
                                     </div>
                                 </div>
+                                <div class="card p-3 m-3" v-if="download.licence_keys">
+                                    <h5> License Keys</h5>
+                                    <span class="list-group d-flex">
+                                        <button type="button" title="Click To Copy Key"v-for="key in download.licence_keys" @click="onClick(key)" class="list-group-item list-group-item-action" >
+                                            {{key}}
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             </div>
                         </div>
@@ -241,6 +249,9 @@
          
            },
            methods: {
+            onClick(key){
+             navigator.clipboard.writeText(key);
+            },
             formatBytes:function(bytes, decimals = 2) {
                 if (bytes === 0) return '0 Bytes';
                 const k = 1024;
@@ -272,3 +283,9 @@
         <!-- ends here -->
 
    </body>
+   <style>
+    .list-group-item {
+      border: none;
+    }
+   </style>
+</html>
